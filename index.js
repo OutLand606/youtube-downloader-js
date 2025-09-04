@@ -16,8 +16,16 @@ const ffmpeg = require("fluent-ffmpeg");
 const readline = require("readline");
 const { spawnSync } = require("child_process");
 
-// Trỏ tới ffmpeg.exe trong cùng thư mục với app
-const ffmpegPath = path.join(process.cwd(), "ffmpeg.exe");
+// Xác định đường dẫn của app (dù là .js hay .exe/.bin sau khi build)
+const appRoot = path.dirname(process.execPath);
+
+// Tùy OS mà chọn ffmpeg binary
+const ffmpegBinary = process.platform === "win32" ? "ffmpeg.exe" : "ffmpeg";
+
+// Ghép path tuyệt đối tới ffmpeg trong cùng thư mục
+const ffmpegPath = path.join(appRoot, ffmpegBinary);
+
+// Set cho fluent-ffmpeg
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 const rl = readline.createInterface({
@@ -26,7 +34,7 @@ const rl = readline.createInterface({
 });
 
 // Tạo thư mục output nếu chưa có
-const outputDir = path.join(process.cwd(), "output");
+const outputDir = path.join(appRoot, "output");
 if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir);
 }

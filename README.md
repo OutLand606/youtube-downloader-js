@@ -1,6 +1,12 @@
 # youtube-downloader-js
 
-## run build
+## run build windows
 npm install -g pkg
 pkg index.js --targets node18-win-x64 --output ./build/youtube-downloader.exe
+
+## run build macos intel x64
+pkg index.js --targets node18-macos-x64 --output ./build/youtube-downloader
+
+## run build macos m1/m2 arm
+pkg index.js --targets node18-macos-arm64 --output ./build/youtube-downloader
 
