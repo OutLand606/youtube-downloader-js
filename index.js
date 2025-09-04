@@ -64,22 +64,44 @@ async function downloadVideo(url) {
     const audioFile = path.join(outputDir, `audio_${Date.now()}.mp3`);
     const outputFile = path.join(outputDir, `${title}.mp4`);
 
+    // --- Video ---
     console.log("⏳ Đang tải video stream...");
-    await new Promise((resolve) => {
+    await new Promise((resolve, reject) => {
+      let starttime;
       ytdl(url, { quality: "highestvideo" })
+        .on("progress", (chunkLength, downloaded, total) => {
+          const percent = ((downloaded / total) * 100).toFixed(2);
+          const downloadedMB = (downloaded / 1024 / 1024).toFixed(2);
+          const totalMB = (total / 1024 / 1024).toFixed(2);
+          process.stdout.write(`\r📹 Video: ${percent}% [${downloadedMB}MB/${totalMB}MB]`);
+        })
         .pipe(fs.createWriteStream(videoFile))
-        .on("finish", resolve);
+        .on("finish", () => {
+          console.log("\n✅ Video tải xong.");
+          resolve();
+        })
+        .on("error", reject);
     });
-    console.log("✅ Video tải xong.");
 
+    // --- Audio ---
     console.log("⏳ Đang tải audio stream...");
-    await new Promise((resolve) => {
+    await new Promise((resolve, reject) => {
       ytdl(url, { filter: "audioonly", quality: "highestaudio" })
+        .on("progress", (chunkLength, downloaded, total) => {
+          const percent = ((downloaded / total) * 100).toFixed(2);
+          const downloadedMB = (downloaded / 1024 / 1024).toFixed(2);
+          const totalMB = (total / 1024 / 1024).toFixed(2);
+          process.stdout.write(`\r🎵 Audio: ${percent}% [${downloadedMB}MB/${totalMB}MB]`);
+        })
         .pipe(fs.createWriteStream(audioFile))
-        .on("finish", resolve);
+        .on("finish", () => {
+          console.log("\n✅ Audio tải xong.");
+          resolve();
+        })
+        .on("error", reject);
     });
-    console.log("✅ Audio tải xong.");
 
+    // --- Merge ---
     console.log("⏳ Đang merge bằng ffmpeg...");
     await new Promise((resolve, reject) => {
       ffmpeg()
