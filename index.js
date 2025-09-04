@@ -332,7 +332,7 @@ function mainMenu() {
       if (choice === "exit") {
         console.log("👋 Thoát ứng dụng.");
         rl.close();
-        return;
+        process.exit(0);
       }
       if (choice === "1") {
         rl.question("👉 Nhập channel URL hoặc username: ", async (url) => {
