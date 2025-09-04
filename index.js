@@ -59,8 +59,9 @@ async function downloadVideo(url) {
     console.log("⏳ Đang lấy thông tin video...");
     const info = await ytdl.getBasicInfo(url);
     let title = info.videoDetails.title.replace(/[\\/:*?"<>|]/g, ""); // xoá ký tự cấm
-    const videoFile = path.join(outputDir, "video_temp.mp4");
-    const audioFile = path.join(outputDir, "audio_temp.mp3");
+
+    const videoFile = path.join(outputDir, `video_${Date.now()}.mp4`);
+    const audioFile = path.join(outputDir, `audio_${Date.now()}.mp3`);
     const outputFile = path.join(outputDir, `${title}.mp4`);
 
     console.log("⏳ Đang tải video stream...");
@@ -221,11 +222,12 @@ async function handleChannelDownload(channelUrl) {
   rl.question(
     "👉 Nhập số video muốn tải (limit, tối đa 100): ",
     async (input) => {
-      let limit = parseInt(input);
+      let limitRaw = input;
+      let limit = parseInt(input) + 1;
       if (isNaN(limit) || limit <= 0) limit = 50;
       if (limit > 100) limit = 100;
 
-      console.log(`\n⏳ Đang lấy danh sách ${limit} video từ kênh...`);
+      console.log(`\n⏳ Đang lấy danh sách ${limitRaw} video từ kênh...`);
 
       let shorts = [];
       let videos = [];
