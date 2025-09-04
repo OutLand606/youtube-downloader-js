@@ -292,14 +292,14 @@ async function handleChannelDownload(channelUrl) {
               if (shorts.length === 0) console.log("❌ Không có Shorts");
               else
                 shorts.forEach((v, i) => {
-                  console.log(`${i + 1}. ${v.title} → ${v.url}`);
+                  console.log(`${i + 1}. ${v.title} \n → Url: ${v.url} \n → Thumb: ${v.thumb} \n → Duration: ${v.duration}`);
                 });
 
               console.log("\n=== Danh sách Videos ===");
               if (videos.length === 0) console.log("❌ Không có Videos");
               else
                 videos.forEach((v, i) => {
-                  console.log(`${i + 1}. ${v.title} → ${v.url}`);
+                  console.log(`${i + 1}. ${v.title} \n → Url: ${v.url} \n → Thumb: ${v.thumb} \n → Duration: ${v.duration}`);
                 });
 
               rl.question("Nhấn Enter để quay lại menu tải...", () => {
@@ -329,9 +329,9 @@ function mainMenu() {
     "=== YouTube Downloader (All-in-one) ===\n" +
       "1: Download by channel (URL or username)\n" +
       "2: Download by direct URL\n" +
-      "exit: Thoát\n> ",
+      "3: Thoát\n> ",
     async (choice) => {
-      if (choice === "exit") {
+      if (choice === "3") {
         console.log("👋 Thoát ứng dụng.");
         rl.close();
         process.exit(0);
